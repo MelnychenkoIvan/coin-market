@@ -1,8 +1,8 @@
-import { Component, OnInit }      from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { CoinsService }           from '../../shared/services';
-import { Coin }                   from '../../models/coin';
-import { Observable }             from 'rxjs/Observable';
+import { Component, OnInit }                    from '@angular/core';
+import { FormBuilder, FormGroup }               from '@angular/forms';
+import { CoinsService, CustomerSearchCriteria } from '../../shared/services';
+import { Coin }                                 from '../../models/coin';
+import { Observable }                           from 'rxjs/Observable';
 
 @Component({
   selector   : 'app-coin-list',
@@ -13,6 +13,7 @@ export class CoinListComponent implements OnInit {
 
   public coins$: Observable<Coin[]> = null;
   public form: FormGroup;
+  public sortCriteria: CustomerSearchCriteria = { sortColumn: 'market_cap_usd', sortDirection: 'asc' };
 
   constructor(private _coinsServ: CoinsService, private _fb: FormBuilder) { }
 
@@ -25,25 +26,26 @@ export class CoinListComponent implements OnInit {
     this.coins$ = this._coinsServ.getCoins(0, 2000, this.form.value);
   }
 
-  onSorted($event) {
-    this.coins$ = this._coinsServ.sort(this.coins$, $event);
+  onSorted(criteria: CustomerSearchCriteria) {
+    this.sortCriteria = criteria;
+    this.coins$ = this._coinsServ.sort(criteria);
   }
 
   initForm() {
     this.form = this._fb.group({
-      marketCapFrom: [],
-      marketCapTo  : [],
-      priceFrom: [],
-      priceTo  : [],
+      marketCapFrom  : [1],
+      marketCapTo    : [],
+      priceFrom      : [],
+      priceTo        : [],
       totalSupplyFrom: [],
       totalSupplyTo  : [],
-      volumeFrom: [],
-      volumeTo  : []
+      volumeFrom     : [10000],
+      volumeTo       : []
 
     });
   }
 
   onFilter() {
-    this.coins$ = this._coinsServ.filter(this.form.value);
+    this.coins$ = this._coinsServ.filter(this.form.value, this.sortCriteria);
   }
 }

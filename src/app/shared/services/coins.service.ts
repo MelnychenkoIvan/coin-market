@@ -32,12 +32,11 @@ export class CoinsService {
 
   getCoins(start: number = 0, limit: number = 100, criteria: CustomerFilterCriteria): Observable<Coin[]> {
     // return this._http.get<Coin[]>(`${CoinsService.HOST}/v1/ticker/?start=${start}&limit=${limit}`)
-    //   .map(res => this.coinsMapper(res))
-    //   .switchMap(res => Observable.of(this.coins));
+    //   .pipe(share())
+    //   .map(res => this.coinsMapper(res));
     return this._http.get<Coin[]>('./assets/testing-data/coins.json')
       .pipe(share())
       .map(res => this.coinsMapper(res));
-    // .switchMap(res => this.filter(criteria));
   }
 
   coinsMapper(data) {
@@ -46,7 +45,7 @@ export class CoinsService {
     return this.coins;
   }
 
-  sort(data, criteria: CustomerSearchCriteria) {
+  sort(criteria: CustomerSearchCriteria) {
     this.coins.sort((a, b) => {
       if (criteria.sortDirection === 'desc') {
         return a[criteria.sortColumn] > b[criteria.sortColumn] ? 1 : -1;
@@ -58,17 +57,23 @@ export class CoinsService {
     return Observable.of(this.coins);
   }
 
-  filter(criteria: CustomerFilterCriteria) {
-    const keys = Object.keys(criteria);
+  filter(filterCriteria: CustomerFilterCriteria, sortCriteria: CustomerSearchCriteria) {
+    const keys = Object.keys(filterCriteria);
     const isEmpty = keys
-      .map(k => criteria[k])
+      .map(k => filterCriteria[k])
       .every(k => k === null || k === '');
 
     if (isEmpty) {
       return Observable.of(this.coinsCopy);
     }
 
-    this.coins = this.coinsCopy
+    this.coins = this._filter(filterCriteria);
+    // this.sort(sortCriteria);
+    return Observable.of(this.coins);
+  }
+
+  private _filter(criteria) {
+    return this.coinsCopy
       .filter(item => {
         let isRight = true;
 
@@ -114,6 +119,5 @@ export class CoinsService {
 
         return isRight;
       });
-    return Observable.of(this.coins);
   }
 }
