@@ -1,0 +1,95 @@
+<div class="main-container">
+  <div class="row">
+    <form class="col-md-12" [formGroup]="form" (submit)="onFilter()">
+      <div class="row">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Market Cap</label>
+            <input type="number" class="form-control" placeholder="from" formControlName="marketCapFrom">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="to" formControlName="marketCapTo">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Price Range</label>
+            <input type="number" class="form-control" placeholder="from" formControlName="priceFrom">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="to" formControlName="priceTo">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Circulating Supply</label>
+            <input type="number" class="form-control" placeholder="from" formControlName="totalSupplyFrom">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="to" formControlName="totalSupplyTo">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Volume 24h</label>
+            <input type="number" class="form-control" placeholder="from" formControlName="volumeFrom">
+          </div>
+          <div class="form-group col-md-6">
+            <input type="number" class="form-control" placeholder="to" formControlName="volumeTo">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row">
+          <button class="btn btn-info pull-right">Filter</button>
+        </div>
+      </div>
+    </form>
+    <div>
+      <div class="col-md-12">
+        <h4>Total count <strong class="text-danger">{{ (coins$ | async)?.length }}</strong></h4>
+      </div>
+      <div class="col-md-12">
+        <table class="table table-coins" sortable-table (sorted)="onSorted($event)">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th sortable-column="name">Name</th>
+            <th sortable-column="symbol">Symbol</th>
+            <th sortable-column="market_cap_usd" sort-direction="asc">Market Cap</th>
+            <th sortable-column="price_usd">Price</th>
+            <th sortable-column="total_supply">Circulating Supply</th>
+            <th sortable-column="24h_volume_usd">Volume (24h)</th>
+            <th sortable-column="percent_change_24h">% 1h</th>
+            <th sortable-column="percent_change_24h">% 24h</th>
+            <th sortable-column="percent_change_7d">% 7d</th>
+            <th sortable-column="price_to_amount">Price/Circulating Supply</th>
+          </tr>
+          </thead>
+          <tbody *ngIf="coins$ | async as coins">
+          <tr *ngFor="let coin of coins">
+            <td>{{ coin.rank }}</td>
+            <td class="text-primary">{{ coin.name }}</td>
+            <td>{{ coin.symbol }}</td>
+            <td>${{ coin.market_cap_usd | numberFormat }}</td>
+            <td>${{ coin.price_usd  | numberFormat }}</td>
+            <td>{{ coin.total_supply | numberFormat }} {{ coin.symbol }}</td>
+            <td>${{ coin['24h_volume_usd'] | numberFormat }}</td>
+            <td [ngClass]="{
+            'text-success': coin.percent_change_1h > 0,
+            'text-danger': coin.percent_change_1h < 0}">{{ coin.percent_change_1h }}%
+            </td>
+            <td [ngClass]="{
+            'text-success': coin.percent_change_24h > 0,
+            'text-danger': coin.percent_change_24h < 0}">{{ coin.percent_change_24h }}%
+            </td>
+            <td [ngClass]="{
+            'text-success': coin.percent_change_7d > 0,
+            'text-danger': coin.percent_change_7d < 0}">{{ coin.percent_change_7d }}%
+            </td>
+            <td class="text-info">{{ coin.price_to_amount }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="!(coins$ | async)">Loading..</div>
+  </div>
+
+</div>

@@ -1,0 +1,28 @@
+form {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.table-coins {
+  th {
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+
+  th, td {
+    text-align: right;
+    min-width: 75px;
+    font-size: 12px;
+
+    &:nth-child(1){
+      min-width: 30px;
+      text-align: center;
+    }
+
+    &:nth-child(2), &:nth-child(3) {
+      text-align: left;
+    }
+  }
+}
