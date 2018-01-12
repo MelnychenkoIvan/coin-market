@@ -13,7 +13,14 @@ export class CoinListComponent implements OnInit {
 
   public coins$: Observable<Coin[]> = null;
   public form: FormGroup;
-  public sortCriteria: CustomerSearchCriteria = { sortColumn: 'market_cap_usd', sortDirection: 'asc' };
+  public paginationCriteria = {
+    start: 0,
+    limit: 2000
+  };
+  public sortCriteria: CustomerSearchCriteria = {
+    sortDirection: 'asc',
+    sortColumn   : 'market_cap_usd'
+  };
 
   constructor(private _coinsServ: CoinsService, private _fb: FormBuilder) { }
 
@@ -23,7 +30,7 @@ export class CoinListComponent implements OnInit {
   }
 
   getCoins() {
-    this.coins$ = this._coinsServ.getCoins(0, 2000, this.form.value);
+    this.coins$ = this._coinsServ.getCoins(this.paginationCriteria, this.form.value);
   }
 
   onSorted(criteria: CustomerSearchCriteria) {
@@ -36,9 +43,9 @@ export class CoinListComponent implements OnInit {
       marketCapFrom  : [1],
       marketCapTo    : [],
       priceFrom      : [],
-      priceTo        : [],
+      priceTo        : [1],
       totalSupplyFrom: [],
-      totalSupplyTo  : [],
+      totalSupplyTo  : [10000000],
       volumeFrom     : [10000],
       volumeTo       : []
 

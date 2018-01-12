@@ -9,9 +9,9 @@ export class Coin {
   market_cap_usd: number;
   available_supply: number;
   total_supply: number;
-  percent_change_1h: string;
-  percent_change_24h: string;
-  percent_change_7d: string;
+  percent_change_1h: number;
+  percent_change_24h: number;
+  percent_change_7d: number;
   last_updated: string;
   price_to_amount?: number;
 
@@ -26,9 +26,9 @@ export class Coin {
     this.market_cap_usd = value.market_cap_usd ? parseInt(value.market_cap_usd) : 0;
     this.available_supply = value.available_supply ? parseInt(value.available_supply) : 0;
     this.total_supply = value.total_supply ? parseInt(value.total_supply) : 0;
-    this.percent_change_1h = value.percent_change_1h;
-    this.percent_change_24h = value.percent_change_24h;
-    this.percent_change_7d = value.percent_change_7d;
+    this.percent_change_1h = value.percent_change_1h ? parseFloat(value.percent_change_1h) : 0;
+    this.percent_change_24h = value.percent_change_24h ? parseFloat(value.percent_change_24h) : 0;
+    this.percent_change_7d = value.percent_change_7d ? parseFloat(value.percent_change_7d) : 0;
     this.last_updated = value.last_updated;
     this.price_to_amount = (this.price_usd / (this.total_supply === 0 ? 1 : this.total_supply));
   }

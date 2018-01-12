@@ -25,18 +25,22 @@ export class CoinsService {
 
   static get HOST() { return 'https://api.coinmarketcap.com'; }
 
-  private coins;
-  private coinsCopy;
+  private coins: Coin[];
+  private coinsCopy: Coin[];
 
   constructor(private _http: HttpClient) {}
 
-  getCoins(start: number = 0, limit: number = 100, criteria: CustomerFilterCriteria): Observable<Coin[]> {
-    // return this._http.get<Coin[]>(`${CoinsService.HOST}/v1/ticker/?start=${start}&limit=${limit}`)
-    //   .pipe(share())
-    //   .map(res => this.coinsMapper(res));
-    return this._http.get<Coin[]>('./assets/testing-data/coins.json')
+  getCoins(paginationCriteria, filterCriteria: CustomerFilterCriteria): Observable<Coin[]> {
+    return this._http.get<Coin[]>(`${CoinsService.HOST}/v1/ticker/?start=${paginationCriteria.start}&limit=${paginationCriteria.limit}`)
       .pipe(share())
-      .map(res => this.coinsMapper(res));
+      .map(res => this.coinsMapper(res))
+      .map(() => this._filter(filterCriteria))
+      .map(res => this.coins = res);
+    // return this._http.get<Coin[]>('./assets/testing-data/coins.json')
+    //   .pipe(share())
+    //   .map(res => this.coinsMapper(res))
+    //   .map(() => this._filter(filterCriteria))
+    //   .map(res => this.coins = res);
   }
 
   coinsMapper(data) {
@@ -45,14 +49,8 @@ export class CoinsService {
     return this.coins;
   }
 
-  sort(criteria: CustomerSearchCriteria) {
-    this.coins.sort((a, b) => {
-      if (criteria.sortDirection === 'desc') {
-        return a[criteria.sortColumn] > b[criteria.sortColumn] ? 1 : -1;
-      } else {
-        return a[criteria.sortColumn] < b[criteria.sortColumn] ? 1 : -1;
-      }
-    });
+  sort(sortCriteria: CustomerSearchCriteria) {
+    this.coins = this._sort(this.coins, sortCriteria);
 
     return Observable.of(this.coins);
   }
@@ -66,13 +64,13 @@ export class CoinsService {
     if (isEmpty) {
       return Observable.of(this.coinsCopy);
     }
-
     this.coins = this._filter(filterCriteria);
-    // this.sort(sortCriteria);
+    this.coins = this._sort(this.coins, sortCriteria);
+
     return Observable.of(this.coins);
   }
 
-  private _filter(criteria) {
+  private _filter(criteria): Coin[] {
     return this.coinsCopy
       .filter(item => {
         let isRight = true;
@@ -119,5 +117,18 @@ export class CoinsService {
 
         return isRight;
       });
+  }
+
+  private _sort(data: Coin[], sortCriteria: CustomerSearchCriteria) {
+    data = [...data];
+    data.sort((a, b) => {
+      if (sortCriteria.sortDirection === 'desc') {
+        return a[sortCriteria.sortColumn] > b[sortCriteria.sortColumn] ? 1 : -1;
+      } else {
+        return a[sortCriteria.sortColumn] < b[sortCriteria.sortColumn] ? 1 : -1;
+      }
+    });
+
+    return data;
   }
 }
