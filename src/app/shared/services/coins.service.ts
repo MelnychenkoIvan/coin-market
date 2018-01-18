@@ -25,6 +25,8 @@ export class CoinsService {
 
   static get HOST() { return 'https://api.coinmarketcap.com'; }
 
+  static get SERVER_HOST() { return 'http://192.168.13.235:4040'; }
+
   private coins: Coin[];
   private coinsCopy: Coin[];
 
@@ -32,8 +34,7 @@ export class CoinsService {
 
   getCoins(paginationCriteria, filterCriteria: CustomerFilterCriteria): Observable<Coin[]> {
     return this._http.get<Coin[]>(`${CoinsService.HOST}/v1/ticker/?start=${paginationCriteria.start}&limit=${paginationCriteria.limit}`)
-      .pipe(share())
-      .map(res => this.coinsMapper(res))
+      .pipe(share()).map(res => this.coinsMapper(res))
       .map(() => this._filter(filterCriteria))
       .map(res => this.coins = res);
     // return this._http.get<Coin[]>('./assets/testing-data/coins.json')
@@ -68,6 +69,10 @@ export class CoinsService {
     this.coins = this._sort(this.coins, sortCriteria);
 
     return Observable.of(this.coins);
+  }
+
+  saveCoins() {
+    return this._http.post(`${CoinsService.SERVER_HOST}/api/coins`, this.coinsCopy[0]);
   }
 
   private _filter(criteria): Coin[] {

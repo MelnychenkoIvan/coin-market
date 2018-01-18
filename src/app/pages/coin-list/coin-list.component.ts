@@ -55,4 +55,10 @@ export class CoinListComponent implements OnInit {
   onFilter() {
     this.coins$ = this._coinsServ.filter(this.form.value, this.sortCriteria);
   }
+
+  onSaveCoins() {
+    this._coinsServ.saveCoins().subscribe(res => {
+      console.log(res);
+    });
+  }
 }
