@@ -1,0 +1,66 @@
+<form novalidate [formGroup]="form">
+  <div formArrayName="items">
+    <div *ngFor="let item of form.get('items').controls; let i = index">
+      <div [formGroupName]="i">
+        <div>
+          <label> Name:
+            <input type="text" formControlName="name">
+          </label>
+        </div>
+        <!--<div>-->
+          <!--<label> Email:-->
+            <!--<input type="text" formControlName="email">-->
+          <!--</label>-->
+        <!--</div>-->
+        <!--<div>-->
+          <!--<label> Confirm Email:-->
+            <!--<input type="text" formControlName="confirm">-->
+          <!--</label>-->
+        <!--</div>-->
+        <div formArrayName="addresses">
+          <div *ngFor="let address of item.get('addresses').controls; let j = index">
+            <div [formGroupName]="j">
+              <div>
+                <label> Street:
+                  <input type="text" formControlName="street">
+                </label>
+              </div>
+              <div>
+                <label> City:
+                  <input type="text" formControlName="city">
+                </label>
+              </div>
+              <div>
+                <label>State:
+                  <select formControlName="state">
+                    <option *ngFor="let state of states" [value]="state">{{ state }}</option>
+                  </select>
+                </label>
+              </div>
+              <div>
+                <label> Zip Code:
+                  <input type="text" formControlName="zip">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="addAddress()">Add Address</button>
+        <!--<div>-->
+          <!--<h4>Super Power:</h4>-->
+          <!--<label><input type="radio" formControlName="power" value="flight">Flight</label>-->
+          <!--<label><input type="radio" formControlName="power" value="x-ray vision">X-ray vision</label>-->
+          <!--<label><input type="radio" formControlName="power" value="strength">Strength</label>-->
+        <!--</div>-->
+        <div>
+          <label>
+            <!--<input type="checkbox" formControlName="sidekick">I have a sidekick-->
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<p>{{ form.value | json  }}</p>
+<p>{{ form.invalid }}</p>
