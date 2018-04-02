@@ -1,44 +1,40 @@
 <div class="main-container">
-  <div class="row">
+  <div class="">
     <form class="col-md-12" [formGroup]="form" (submit)="onFilter()">
-      <div class="row">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label>Market Cap</label>
-            <input type="number" class="form-control" placeholder="from" formControlName="marketCapFrom">
-          </div>
-          <div class="form-group col-md-6">
-            <input type="number" class="form-control" placeholder="to" formControlName="marketCapTo">
-          </div>
-          <div class="form-group col-md-6">
-            <label>Price Range</label>
-            <input type="number" class="form-control" placeholder="from" formControlName="priceFrom">
-          </div>
-          <div class="form-group col-md-6">
-            <input type="number" class="form-control" placeholder="to" formControlName="priceTo">
-          </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Market Cap</label>
+          <input type="number" class="form-control" placeholder="from" formControlName="marketCapFrom">
         </div>
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label>Circulating Supply</label>
-            <input type="number" class="form-control" placeholder="from" formControlName="totalSupplyFrom">
-          </div>
-          <div class="form-group col-md-6">
-            <input type="number" class="form-control" placeholder="to" formControlName="totalSupplyTo">
-          </div>
-          <div class="form-group col-md-6">
-            <label>Volume 24h</label>
-            <input type="number" class="form-control" placeholder="from" formControlName="volumeFrom">
-          </div>
-          <div class="form-group col-md-6">
-            <input type="number" class="form-control" placeholder="to" formControlName="volumeTo">
-          </div>
+        <div class="form-group col-md-6">
+          <input type="number" class="form-control" placeholder="to" formControlName="marketCapTo">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Price Range</label>
+          <input type="number" class="form-control" placeholder="from" formControlName="priceFrom">
+        </div>
+        <div class="form-group col-md-6">
+          <input type="number" class="form-control" placeholder="to" formControlName="priceTo">
         </div>
       </div>
-      <div class="col-md-12">
-        <div class="row">
-          <button class="btn btn-info pull-right">Filter</button>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label>Circulating Supply</label>
+          <input type="number" class="form-control" placeholder="from" formControlName="totalSupplyFrom">
         </div>
+        <div class="form-group col-md-6">
+          <input type="number" class="form-control" placeholder="to" formControlName="totalSupplyTo">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Volume 24h</label>
+          <input type="number" class="form-control" placeholder="from" formControlName="volumeFrom">
+        </div>
+        <div class="form-group col-md-6">
+          <input type="number" class="form-control" placeholder="to" formControlName="volumeTo">
+        </div>
+      </div>
+      <div class="">
+        <button class="btn btn-info pull-right">Filter</button>
       </div>
     </form>
     <!--<div class="col-md-12">-->

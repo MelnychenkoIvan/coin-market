@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Coin }       from '../../models/coin';
+import { Coin }       from '../../models';
 import { share }      from 'rxjs/operators';
 
 export interface CustomerSearchCriteria {
